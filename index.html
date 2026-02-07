@@ -2,7 +2,6 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine Wheel 💖</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600&family=Itim&display=swap" rel="stylesheet">
@@ -10,30 +9,14 @@
 <style>
 body {
   margin: 0;
-  min-height: 100vh;
   font-family: 'Mali', cursive;
   background: #fff5f8;
   text-align: center;
-  overflow-x: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  overflow: hidden;
 }
 
-section {
-  display: none;
-  width: 100%;
-  max-width: 420px;
-  padding: 20px 16px;
-  box-sizing: border-box;
-}
-
-section.active {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+section { display: none; }
+section.active { display: block; }
 
 h1 { color: #ff6fae; }
 
@@ -53,7 +36,7 @@ button {
   position: relative;
   width: 280px;
   height: 280px;
-  margin: 16px auto;
+  margin: 20px auto;
 }
 
 #wheel {
@@ -68,7 +51,7 @@ button {
   top: -10px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 30px;
+  font-size: 32px;
 }
 
 /* popup */
@@ -84,18 +67,25 @@ button {
 
 .popupBox {
   background: white;
-  padding: 28px 20px;
+  padding: 26px;
   border-radius: 26px;
-  width: 90%;
+  width: 85%;
   max-width: 320px;
   text-align: center;
-  box-shadow: 0 15px 40px rgba(180,130,255,.35);
-  animation: pop .4s ease;
+  box-shadow: 0 15px 40px rgba(180, 130, 255, 0.35);
+  animation: pop 0.4s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 @keyframes pop {
-  from { transform: scale(.8); opacity: 0; }
+  from { transform: scale(0.8); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
+}
+
+#popupTitle {
+  font-size: 20px;
+  color: #ff6fae;
 }
 
 #popupReward {
@@ -104,31 +94,42 @@ button {
   margin: 12px 0;
 }
 
-/* floating icons */
-#floating-icons span {
-  position: fixed;
-  bottom: -40px;
-  font-size: 24px;
-  animation: floatUp 8s linear infinite;
+#popupSub {
+  font-size: 14px;
+  color: #ff8fbf;
 }
 
-@keyframes floatUp {
-  from { transform: translateY(0); opacity: 1; }
-  to { transform: translateY(-120vh); opacity: 0; }
+/* final popup */
+#finalText {
+  font-size: 22px;
+  color: #9b6bff;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+#finalEmoji {
+  font-size: 28px;
+}
+
+/* sparkle */
+.sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #fff 0%, #d9b8ff 60%, transparent 70%);
+  border-radius: 50%;
+  animation: sparkle 2.5s linear infinite;
+}
+
+@keyframes sparkle {
+  0% { transform: scale(0.5) translateY(0); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: scale(1.2) translateY(-40px); opacity: 0; }
 }
 </style>
 </head>
 
 <body>
-
-<!-- 🔊 เสียง -->
-<audio id="bgMusic" loop>
-  <source src="https://cdn.pixabay.com/audio/2023/02/14/audio_4c1a64c1a1.mp3" type="audio/mpeg">
-</audio>
-
-<audio id="spinSound">
-  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_6c4f94c88c.mp3" type="audio/mpeg">
-</audio>
 
 <section id="intro" class="active">
   <h1>💖 Happy Valentine’s Day 💖</h1>
@@ -147,23 +148,45 @@ button {
   <button onclick="spin()">หมุนวงล้อ 🎡</button>
 </section>
 
+<!-- popup รางวัล -->
 <div id="popup" class="popup" onclick="closeReward()">
   <div class="popupBox">
-    <div>💝 รางวัลของแงวก็คือ</div>
+    <div id="popupTitle">💝 รางวัลของแงวก็คือ🫶🏻</div>
     <div id="popupReward"></div>
+    <div id="popupSub">สิทธิ์พิเศษสำหรับเธอคนเดียว 💜✨</div>
   </div>
 </div>
 
-<div id="floating-icons"></div>
+<!-- popup สุดท้าย -->
+<div id="finalPopup" class="popup" onclick="this.style.display='none'">
+  <div class="popupBox">
+    <span class="sparkle" style="top:10%; left:15%"></span>
+    <span class="sparkle" style="top:20%; left:80%"></span>
+    <span class="sparkle" style="top:60%; left:10%"></span>
+    <span class="sparkle" style="top:70%; left:75%"></span>
+
+    <div id="finalText">ทุกรางวัลเป็นของเธอคนพิเศษ</div>
+    <div id="finalEmoji">🐶🐱💜✨💐🫶🏻</div>
+  </div>
+</div>
+
+<!-- เสียง -->
+<audio id="bgm" loop>
+  <source src="https://cdn.pixabay.com/audio/2023/03/28/audio_6cfdc6c5b6.mp3">
+</audio>
+
+<audio id="ding">
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3">
+</audio>
 
 <script>
 const prizes = [
-  "กอดเติมพลัง🤍",
-  "โดนมุมุ10ที😚",
-  "มื้อตามใจแงว🍽️",
-  "โดนจุ๊บ1นาที💋",
-  "พาไปทำสวย💅🏼",
-  "ตามใจทั้งวัน😬🤏🏻"
+  "กอดเติมพลัง 🤍",
+  "โดนมุมุ 10 ที 😚",
+  "มื้อตามใจแงว 🍽️",
+  "โดนจุ๊บ 1 นาที 💋",
+  "พาไปทำสวย 💅🏼",
+  "ตามใจทั้งวัน 😬🤏🏻"
 ];
 
 const canvas = document.getElementById("wheel");
@@ -171,12 +194,7 @@ const ctx = canvas.getContext("2d");
 const size = canvas.width;
 const center = size / 2;
 const slice = 2 * Math.PI / prizes.length;
-
 let rotation = 0;
-let lastPrize = "";
-
-const bgMusic = document.getElementById("bgMusic");
-const spinSound = document.getElementById("spinSound");
 
 function drawWheel() {
   prizes.forEach((text, i) => {
@@ -199,42 +217,29 @@ function drawWheel() {
 drawWheel();
 
 function start() {
-  bgMusic.volume = 0.4;
-  bgMusic.play();
-
+  document.getElementById("bgm").play();
   intro.classList.remove("active");
   wheelPage.classList.add("active");
 }
 
 function spin() {
-  spinSound.currentTime = 0;
-  spinSound.play();
-
+  document.getElementById("ding").play();
   const rand = Math.floor(Math.random() * prizes.length);
-  lastPrize = prizes[rand];
-
   rotation += 360 * 5 + (360 - rand * (360/prizes.length));
   canvas.style.transform = `rotate(${rotation}deg)`;
 
   setTimeout(() => {
-    popupReward.innerText = lastPrize;
+    popupReward.innerText = prizes[rand];
     popup.style.display = "flex";
   }, 4000);
 }
 
 function closeReward() {
   popup.style.display = "none";
+  setTimeout(() => {
+    finalPopup.style.display = "flex";
+  }, 300);
 }
-
-/* floating icons */
-const icons = ["💜","🐱","🐶","🌹","🌻"];
-setInterval(() => {
-  const span = document.createElement("span");
-  span.innerText = icons[Math.floor(Math.random()*icons.length)];
-  span.style.left = Math.random()*100 + "vw";
-  document.getElementById("floating-icons").appendChild(span);
-  setTimeout(() => span.remove(), 8000);
-}, 500);
 </script>
 
 </body>
