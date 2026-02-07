@@ -15,7 +15,6 @@ body {
   overflow: hidden;
 }
 
-/* จัดกลางจอ */
 .wrapper {
   min-height: 100vh;
   display: flex;
@@ -46,6 +45,17 @@ button {
   font-family: 'Itim', cursive;
   cursor: pointer;
   box-shadow: 0 6px 15px rgba(255,111,174,.4);
+}
+
+/* input */
+input {
+  padding: 12px;
+  border-radius: 20px;
+  border: 1px solid #ffd1e3;
+  font-size: 16px;
+  text-align: center;
+  width: 80%;
+  margin-bottom: 16px;
 }
 
 /* วงล้อ */
@@ -112,13 +122,12 @@ button {
   margin-top: 8px;
 }
 
-/* อิโมจิลอย */
+/* floating icons */
 #floating-icons span {
   position: fixed;
   bottom: -40px;
   font-size: 24px;
   animation: floatUp 8s linear infinite;
-  pointer-events: none;
 }
 
 @keyframes floatUp {
@@ -133,9 +142,16 @@ button {
 <div class="wrapper">
 <div class="container">
 
-<section id="intro" class="active">
+<!-- หน้าใส่รหัส -->
+<section id="codePage" class="active">
+  <h1>🔐 ใส่รหัสลับก่อนน้า</h1>
+  <input id="codeInput" placeholder="รหัสของเรา 💜">
+  <button onclick="checkCode()">ไปต่อเลย 🐾</button>
+</section>
+
+<section id="intro">
   <h1>💖 Happy Valentine’s Day 💖</h1>
-  <p>สำหรับแงวคนโปรด 💜🐱</p>
+  <p>สำหรับแมวตัวโปรด 💜🐱</p>
   <button onclick="start()">พร้อมเติมความหวาน 💌</button>
 </section>
 
@@ -150,6 +166,22 @@ button {
   <button onclick="spin()">หมุนวงล้อ 🎡</button>
 </section>
 
+<!-- หน้าสุดท้าย -->
+<section id="finalPage">
+  <h1>Happy Valentine meowbabe 💜🐱</h1>
+  <p>
+    ขอบคุณที่อยู่ข้างๆกัน ไม่ทิ้งกันไปไหน<br>
+    ปีนี้เป็นวาเลนไทน์ปีที่ 3 ของพวกเรา<br>
+    หมาเด็กกับแงวหน้าเหวี่ยง🐶🐱<br><br>
+    เบิ้บบูมากๆ 🫶🏻<br>
+    อยู่เป็น my valentine ให้กันทุกปีไป เรื่อยๆเลยนะ✨🤏🏻
+  </p>
+
+  <a href="https://youtu.be/4LeQ7bIEUKM?si=_fGe7LO-pB0j9hQU" target="_blank">
+    <button>กดฟังเพลงนี้ด้วยกัน 🎶💜</button>
+  </a>
+</section>
+
 </div>
 </div>
 
@@ -162,32 +194,33 @@ button {
   </div>
 </div>
 
-<!-- popup สุดท้าย -->
-<div id="finalPopup" class="popup" onclick="this.style.display='none'">
+<!-- popup สิทธิ์พิเศษ -->
+<div id="finalPopup" class="popup" onclick="goFinalPage()">
   <div class="popupBox">
-    <div id="finalText">หมุนได้อะไรก็เป็นของเธอ<br>คนพิเศษ</div>
+    <div id="finalText">ทุกรางวัลเป็นของเธอ<br>คนพิเศษ</div>
     <div id="finalEmoji">🐶🐱💜✨💐🫶🏻</div>
   </div>
 </div>
 
-<!-- floating icons -->
 <div id="floating-icons"></div>
 
-<!-- เสียง -->
-<audio id="bgm" loop>
-  <source src="https://cdn.pixabay.com/audio/2023/03/28/audio_6cfdc6c5b6.mp3">
-</audio>
-
-<audio id="ding">
-  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3">
-</audio>
-
 <script>
+const CORRECT_CODE = "meowbabe";
+
+function checkCode() {
+  if (codeInput.value === CORRECT_CODE) {
+    codePage.classList.remove("active");
+    intro.classList.add("active");
+  } else {
+    alert("รหัสไม่ถูกน้า 🐱");
+  }
+}
+
 const prizes = [
   "กอดเติมพลัง 🤍",
   "โดนมุมุ 10 ที 😚",
   "มื้อตามใจแงว 🍽️",
-  "โดนจุ๊บ 1 นาที 💋",
+  "เติมหมาเด็กฟรี 🐶",
   "พาไปทำสวย 💅🏼",
   "ตามใจทั้งวัน 😬🤏🏻"
 ];
@@ -211,25 +244,19 @@ function drawWheel() {
     ctx.rotate(slice*i + slice/2);
     ctx.textAlign = "center";
     ctx.fillStyle = "#ff4f9a";
-    ctx.font = "15px Mali";
-    ctx.fillText(text, center*0.55, 0);
+    ctx.font = "16px 'Itim'";
+    ctx.fillText(text, center*0.6, 0);
     ctx.restore();
   });
 }
 drawWheel();
 
 function start() {
-  document.getElementById("bgm").volume = 0.6;
-  document.getElementById("bgm").play();
   intro.classList.remove("active");
   wheelPage.classList.add("active");
 }
 
 function spin() {
-  const ding = document.getElementById("ding");
-  ding.currentTime = 0;
-  ding.play();
-
   const rand = Math.floor(Math.random() * prizes.length);
   rotation += 360 * 5 + (360 - rand * (360/prizes.length));
   canvas.style.transform = `rotate(${rotation}deg)`;
@@ -242,9 +269,13 @@ function spin() {
 
 function closeReward() {
   popup.style.display = "none";
-  setTimeout(() => {
-    finalPopup.style.display = "flex";
-  }, 300);
+  setTimeout(() => finalPopup.style.display = "flex", 300);
+}
+
+function goFinalPage() {
+  finalPopup.style.display = "none";
+  wheelPage.classList.remove("active");
+  finalPage.classList.add("active");
 }
 
 /* emoji ลอย */
@@ -260,7 +291,5 @@ setInterval(() => {
 
 </body>
 </html>
-
-
 
 
