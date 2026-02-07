@@ -33,14 +33,8 @@ body {
 section { display: none; }
 section.active { display: block; }
 
-h1 {
-  color: #ff6fae;
-  font-size: 24px;
-}
-
-p {
-  font-size: 16px;
-}
+h1 { color: #ff6fae; font-size: 24px; }
+p { font-size: 16px; }
 
 button {
   padding: 14px 36px;
@@ -96,39 +90,40 @@ button {
   max-width: 320px;
   text-align: center;
   box-shadow: 0 15px 40px rgba(180, 130, 255, 0.35);
-  animation: pop 0.4s ease;
+  animation: pop .4s ease;
 }
 
 @keyframes pop {
-  from { transform: scale(0.85); opacity: 0; }
+  from { transform: scale(.85); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
 
-#popupTitle {
-  font-size: 20px;
-  color: #ff6fae;
-}
-
-#popupReward {
-  font-size: 24px;
-  color: #ff4f9a;
-  margin: 12px 0;
-}
-
-#popupSub {
-  font-size: 14px;
-  color: #ff8fbf;
-}
+#popupTitle { font-size: 20px; color: #ff6fae; }
+#popupReward { font-size: 24px; color: #ff4f9a; margin: 12px 0; }
+#popupSub { font-size: 14px; color: #ff8fbf; }
 
 #finalText {
   font-size: 22px;
   color: #9b6bff;
   font-weight: 600;
 }
-
 #finalEmoji {
   font-size: 28px;
   margin-top: 8px;
+}
+
+/* อิโมจิลอย */
+#floating-icons span {
+  position: fixed;
+  bottom: -40px;
+  font-size: 24px;
+  animation: floatUp 8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes floatUp {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-120vh); opacity: 0; }
 }
 </style>
 </head>
@@ -161,7 +156,7 @@ button {
 <!-- popup รางวัล -->
 <div id="popup" class="popup" onclick="closeReward()">
   <div class="popupBox">
-    <div id="popupTitle">💝 รางวัลของแงวก็คือ🫶🏻</div>
+    <div id="popupTitle">💝 รางวัลของแงวก็คือ 🫶🏻</div>
     <div id="popupReward"></div>
     <div id="popupSub">สิทธิ์พิเศษสำหรับเธอคนเดียว 💜✨</div>
   </div>
@@ -175,13 +170,16 @@ button {
   </div>
 </div>
 
+<!-- floating icons -->
+<div id="floating-icons"></div>
+
 <!-- เสียง -->
-<audio id="bgm" loop preload="auto">
-  <source src="https://cdn.pixabay.com/audio/2023/03/28/audio_6cfdc6c5b6.mp3" type="audio/mpeg">
+<audio id="bgm" loop>
+  <source src="https://cdn.pixabay.com/audio/2023/03/28/audio_6cfdc6c5b6.mp3">
 </audio>
 
-<audio id="ding" preload="auto">
-  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3" type="audio/mpeg">
+<audio id="ding">
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3">
 </audio>
 
 <script>
@@ -221,9 +219,8 @@ function drawWheel() {
 drawWheel();
 
 function start() {
-  const bgm = document.getElementById("bgm");
-  bgm.volume = 0.6;
-  bgm.play().catch(()=>{});
+  document.getElementById("bgm").volume = 0.6;
+  document.getElementById("bgm").play();
   intro.classList.remove("active");
   wheelPage.classList.add("active");
 }
@@ -231,7 +228,7 @@ function start() {
 function spin() {
   const ding = document.getElementById("ding");
   ding.currentTime = 0;
-  ding.play().catch(()=>{});
+  ding.play();
 
   const rand = Math.floor(Math.random() * prizes.length);
   rotation += 360 * 5 + (360 - rand * (360/prizes.length));
@@ -249,17 +246,17 @@ function closeReward() {
     finalPopup.style.display = "flex";
   }, 300);
 }
-  /* floating icons */
-const icons = ["💜","🐱","🐶","🌹","🌻"];
+
+/* emoji ลอย */
+const icons = ["💜","🐱","🐶","🌹","✨"];
 setInterval(() => {
   const span = document.createElement("span");
   span.innerText = icons[Math.floor(Math.random()*icons.length)];
   span.style.left = Math.random()*100 + "vw";
   document.getElementById("floating-icons").appendChild(span);
   setTimeout(() => span.remove(), 8000);
-}, 500);
+}, 600);
 </script>
 
 </body>
 </html>
-
