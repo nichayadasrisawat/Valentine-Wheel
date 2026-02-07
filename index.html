@@ -249,7 +249,17 @@ function closeReward() {
     finalPopup.style.display = "flex";
   }, 300);
 }
+  /* floating icons */
+const icons = ["💜","🐱","🐶","🌹","🌻"];
+setInterval(() => {
+  const span = document.createElement("span");
+  span.innerText = icons[Math.floor(Math.random()*icons.length)];
+  span.style.left = Math.random()*100 + "vw";
+  document.getElementById("floating-icons").appendChild(span);
+  setTimeout(() => span.remove(), 8000);
+}, 500);
 </script>
 
 </body>
 </html>
+
