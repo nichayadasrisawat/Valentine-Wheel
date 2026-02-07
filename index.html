@@ -2,6 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine Wheel 💖</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600&family=Itim&display=swap" rel="stylesheet">
@@ -9,14 +10,30 @@
 <style>
 body {
   margin: 0;
+  min-height: 100vh;
   font-family: 'Mali', cursive;
   background: #fff5f8;
   text-align: center;
-  overflow: hidden;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-section { display: none; }
-section.active { display: block; }
+section {
+  display: none;
+  width: 100%;
+  max-width: 420px;
+  padding: 20px 16px;
+  box-sizing: border-box;
+}
+
+section.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
 h1 { color: #ff6fae; }
 
@@ -34,9 +51,9 @@ button {
 
 #wheel-container {
   position: relative;
-  width: 300px;
-  height: 300px;
-  margin: 30px auto;
+  width: 280px;
+  height: 280px;
+  margin: 16px auto;
 }
 
 #wheel {
@@ -48,13 +65,13 @@ button {
 
 #pointer {
   position: absolute;
-  top: -12px;
+  top: -10px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 34px;
+  font-size: 30px;
 }
 
-/* popup กลาง */
+/* popup */
 .popup {
   position: fixed;
   inset: 0;
@@ -67,64 +84,24 @@ button {
 
 .popupBox {
   background: white;
-  padding: 30px;
+  padding: 28px 20px;
   border-radius: 26px;
-  width: 320px;
+  width: 90%;
+  max-width: 320px;
   text-align: center;
-  box-shadow: 0 15px 40px rgba(180, 130, 255, 0.35);
-  animation: pop 0.4s ease;
-  position: relative;
-  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(180,130,255,.35);
+  animation: pop .4s ease;
 }
 
 @keyframes pop {
-  from { transform: scale(0.8); opacity: 0; }
+  from { transform: scale(.8); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
 
-#popupTitle {
-  font-size: 20px;
-  color: #ff6fae;
-}
-
 #popupReward {
-  font-size: 26px;
+  font-size: 24px;
   color: #ff4f9a;
   margin: 12px 0;
-}
-
-#popupSub {
-  font-size: 14px;
-  color: #ff8fbf;
-}
-
-/* final popup */
-#finalText {
-  font-size: 22px;
-  color: #9b6bff;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
-#finalEmoji {
-  font-size: 28px;
-}
-
-/* sparkle */
-.sparkle {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: radial-gradient(circle, #fff 0%, #d9b8ff 60%, transparent 70%);
-  border-radius: 50%;
-  animation: sparkle 2.5s linear infinite;
-  opacity: 0.8;
-}
-
-@keyframes sparkle {
-  0% { transform: scale(0.5) translateY(0); opacity: 0; }
-  50% { opacity: 1; }
-  100% { transform: scale(1.2) translateY(-40px); opacity: 0; }
 }
 
 /* floating icons */
@@ -139,77 +116,19 @@ button {
   from { transform: translateY(0); opacity: 1; }
   to { transform: translateY(-120vh); opacity: 0; }
 }
-/* ===== iPhone Mode ===== */
-@media only screen 
-  and (max-width: 430px) 
-  and (-webkit-device-pixel-ratio: 2) {
-
-  body {
-    font-size: 18px;
-  }
-
-  h1 {
-    font-size: 22px;
-    padding: 0 12px;
-  }
-
-  p {
-    font-size: 16px;
-  }
-
-  button {
-    width: 80%;
-    max-width: 300px;
-    font-size: 18px;
-    padding: 14px 0;
-  }
-
-  #wheel-container {
-    width: 260px;
-    height: 260px;
-    margin: 20px auto;
-  }
-
-  #wheel {
-    width: 260px;
-    height: 260px;
-  }
-
-  #pointer {
-    font-size: 30px;
-    top: -10px;
-  }
-
-  .popupBox {
-    width: 85%;
-    max-width: 300px;
-    padding: 24px 20px;
-  }
-
-  #popupReward {
-    font-size: 22px;
-  }
-
-  #popupTitle {
-    font-size: 18px;
-  }
-
-  #popupSub {
-    font-size: 13px;
-  }
-
-  #finalText {
-    font-size: 20px;
-  }
-
-  #finalEmoji {
-    font-size: 26px;
-  }
-}
 </style>
 </head>
 
 <body>
+
+<!-- 🔊 เสียง -->
+<audio id="bgMusic" loop>
+  <source src="https://cdn.pixabay.com/audio/2023/02/14/audio_4c1a64c1a1.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="spinSound">
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_6c4f94c88c.mp3" type="audio/mpeg">
+</audio>
 
 <section id="intro" class="active">
   <h1>💖 Happy Valentine’s Day 💖</h1>
@@ -222,32 +141,16 @@ button {
 
   <div id="wheel-container">
     <div id="pointer">💜</div>
-    <canvas id="wheel" width="300" height="300"></canvas>
+    <canvas id="wheel" width="280" height="280"></canvas>
   </div>
 
   <button onclick="spin()">หมุนวงล้อ 🎡</button>
 </section>
 
-<!-- popup รางวัล -->
 <div id="popup" class="popup" onclick="closeReward()">
   <div class="popupBox">
-    <div id="popupTitle">💝 รางวัลของแงวก็คือ 🫶🏻</div>
+    <div>💝 รางวัลของแงวก็คือ</div>
     <div id="popupReward"></div>
-    <div id="popupSub">สิทธิ์พิเศษสำหรับเธอคนเดียว 💜✨</div>
-  </div>
-</div>
-
-<!-- popup สุดท้าย -->
-<div id="finalPopup" class="popup" onclick="this.style.display='none'">
-  <div class="popupBox">
-    <span class="sparkle" style="top:10%; left:15%"></span>
-    <span class="sparkle" style="top:20%; left:80%"></span>
-    <span class="sparkle" style="top:60%; left:10%"></span>
-    <span class="sparkle" style="top:70%; left:75%"></span>
-    <span class="sparkle" style="top:40%; left:50%"></span>
-
-    <div id="finalText">ทุกรางวัลเป็นของเธอคนพิเศษ</div>
-    <div id="finalEmoji">🐶🐱💜✨💐🫶🏻</div>
   </div>
 </div>
 
@@ -268,8 +171,12 @@ const ctx = canvas.getContext("2d");
 const size = canvas.width;
 const center = size / 2;
 const slice = 2 * Math.PI / prizes.length;
+
 let rotation = 0;
 let lastPrize = "";
+
+const bgMusic = document.getElementById("bgMusic");
+const spinSound = document.getElementById("spinSound");
 
 function drawWheel() {
   prizes.forEach((text, i) => {
@@ -284,7 +191,7 @@ function drawWheel() {
     ctx.rotate(slice*i + slice/2);
     ctx.textAlign = "center";
     ctx.fillStyle = "#ff4f9a";
-    ctx.font = "15px Mali";
+    ctx.font = "14px Mali";
     ctx.fillText(text, center*0.55, 0);
     ctx.restore();
   });
@@ -292,13 +199,20 @@ function drawWheel() {
 drawWheel();
 
 function start() {
+  bgMusic.volume = 0.4;
+  bgMusic.play();
+
   intro.classList.remove("active");
   wheelPage.classList.add("active");
 }
 
 function spin() {
+  spinSound.currentTime = 0;
+  spinSound.play();
+
   const rand = Math.floor(Math.random() * prizes.length);
   lastPrize = prizes[rand];
+
   rotation += 360 * 5 + (360 - rand * (360/prizes.length));
   canvas.style.transform = `rotate(${rotation}deg)`;
 
@@ -310,9 +224,6 @@ function spin() {
 
 function closeReward() {
   popup.style.display = "none";
-  setTimeout(() => {
-    finalPopup.style.display = "flex";
-  }, 300);
 }
 
 /* floating icons */
