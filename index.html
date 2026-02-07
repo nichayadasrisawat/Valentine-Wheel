@@ -2,6 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine Wheel 💖</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600&family=Itim&display=swap" rel="stylesheet">
@@ -11,14 +12,35 @@ body {
   margin: 0;
   font-family: 'Mali', cursive;
   background: #fff5f8;
-  text-align: center;
   overflow: hidden;
+}
+
+/* จัดกลางจอ */
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  padding: 20px;
 }
 
 section { display: none; }
 section.active { display: block; }
 
-h1 { color: #ff6fae; }
+h1 {
+  color: #ff6fae;
+  font-size: 24px;
+}
+
+p {
+  font-size: 16px;
+}
 
 button {
   padding: 14px 36px;
@@ -26,16 +48,17 @@ button {
   border: none;
   background: linear-gradient(135deg, #ff7eb3, #ff65a3);
   color: white;
-  font-size: 20px;
+  font-size: 18px;
   font-family: 'Itim', cursive;
   cursor: pointer;
   box-shadow: 0 6px 15px rgba(255,111,174,.4);
 }
 
+/* วงล้อ */
 #wheel-container {
   position: relative;
-  width: 280px;
-  height: 280px;
+  width: 300px;
+  height: 300px;
   margin: 20px auto;
 }
 
@@ -48,10 +71,10 @@ button {
 
 #pointer {
   position: absolute;
-  top: -10px;
+  top: -8px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 32px;
+  font-size: 30px;
 }
 
 /* popup */
@@ -74,12 +97,10 @@ button {
   text-align: center;
   box-shadow: 0 15px 40px rgba(180, 130, 255, 0.35);
   animation: pop 0.4s ease;
-  position: relative;
-  overflow: hidden;
 }
 
 @keyframes pop {
-  from { transform: scale(0.8); opacity: 0; }
+  from { transform: scale(0.85); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
 
@@ -99,37 +120,23 @@ button {
   color: #ff8fbf;
 }
 
-/* final popup */
 #finalText {
   font-size: 22px;
   color: #9b6bff;
   font-weight: 600;
-  margin-bottom: 12px;
 }
 
 #finalEmoji {
   font-size: 28px;
-}
-
-/* sparkle */
-.sparkle {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: radial-gradient(circle, #fff 0%, #d9b8ff 60%, transparent 70%);
-  border-radius: 50%;
-  animation: sparkle 2.5s linear infinite;
-}
-
-@keyframes sparkle {
-  0% { transform: scale(0.5) translateY(0); opacity: 0; }
-  50% { opacity: 1; }
-  100% { transform: scale(1.2) translateY(-40px); opacity: 0; }
+  margin-top: 8px;
 }
 </style>
 </head>
 
 <body>
+
+<div class="wrapper">
+<div class="container">
 
 <section id="intro" class="active">
   <h1>💖 Happy Valentine’s Day 💖</h1>
@@ -142,11 +149,14 @@ button {
 
   <div id="wheel-container">
     <div id="pointer">💜</div>
-    <canvas id="wheel" width="280" height="280"></canvas>
+    <canvas id="wheel" width="300" height="300"></canvas>
   </div>
 
   <button onclick="spin()">หมุนวงล้อ 🎡</button>
 </section>
+
+</div>
+</div>
 
 <!-- popup รางวัล -->
 <div id="popup" class="popup" onclick="closeReward()">
@@ -160,23 +170,18 @@ button {
 <!-- popup สุดท้าย -->
 <div id="finalPopup" class="popup" onclick="this.style.display='none'">
   <div class="popupBox">
-    <span class="sparkle" style="top:10%; left:15%"></span>
-    <span class="sparkle" style="top:20%; left:80%"></span>
-    <span class="sparkle" style="top:60%; left:10%"></span>
-    <span class="sparkle" style="top:70%; left:75%"></span>
-
     <div id="finalText">ทุกรางวัลเป็นของเธอคนพิเศษ</div>
     <div id="finalEmoji">🐶🐱💜✨💐🫶🏻</div>
   </div>
 </div>
 
 <!-- เสียง -->
-<audio id="bgm" loop>
-  <source src="https://cdn.pixabay.com/audio/2023/03/28/audio_6cfdc6c5b6.mp3">
+<audio id="bgm" loop preload="auto">
+  <source src="https://cdn.pixabay.com/audio/2023/03/28/audio_6cfdc6c5b6.mp3" type="audio/mpeg">
 </audio>
 
-<audio id="ding">
-  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3">
+<audio id="ding" preload="auto">
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -191,8 +196,7 @@ const prizes = [
 
 const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
-const size = canvas.width;
-const center = size / 2;
+const center = canvas.width / 2;
 const slice = 2 * Math.PI / prizes.length;
 let rotation = 0;
 
@@ -209,7 +213,7 @@ function drawWheel() {
     ctx.rotate(slice*i + slice/2);
     ctx.textAlign = "center";
     ctx.fillStyle = "#ff4f9a";
-    ctx.font = "14px Mali";
+    ctx.font = "15px Mali";
     ctx.fillText(text, center*0.55, 0);
     ctx.restore();
   });
@@ -217,13 +221,18 @@ function drawWheel() {
 drawWheel();
 
 function start() {
-  document.getElementById("bgm").play();
+  const bgm = document.getElementById("bgm");
+  bgm.volume = 0.6;
+  bgm.play().catch(()=>{});
   intro.classList.remove("active");
   wheelPage.classList.add("active");
 }
 
 function spin() {
-  document.getElementById("ding").play();
+  const ding = document.getElementById("ding");
+  ding.currentTime = 0;
+  ding.play().catch(()=>{});
+
   const rand = Math.floor(Math.random() * prizes.length);
   rotation += 360 * 5 + (360 - rand * (360/prizes.length));
   canvas.style.transform = `rotate(${rotation}deg)`;
