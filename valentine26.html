@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>Valentine Wheel 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600&family=Itim&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Mali', cursive;
+  background: #fff5f8;
+  text-align: center;
+  overflow: hidden;
+}
+
+section { display: none; }
+section.active { display: block; }
+
+h1 { color: #ff6fae; }
+
+button {
+  padding: 14px 36px;
+  border-radius: 40px;
+  border: none;
+  background: linear-gradient(135deg, #ff7eb3, #ff65a3);
+  color: white;
+  font-size: 20px;
+  font-family: 'Itim', cursive;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(255,111,174,.4);
+}
+
+#wheel-container {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin: 30px auto;
+}
+
+#wheel {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transition: transform 4s cubic-bezier(.17,.67,.26,1);
+}
+
+#pointer {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 34px;
+}
+
+/* popup กลาง */
+.popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99;
+}
+
+.popupBox {
+  background: white;
+  padding: 30px;
+  border-radius: 26px;
+  width: 320px;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(180, 130, 255, 0.35);
+  animation: pop 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes pop {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+#popupTitle {
+  font-size: 20px;
+  color: #ff6fae;
+}
+
+#popupReward {
+  font-size: 26px;
+  color: #ff4f9a;
+  margin: 12px 0;
+}
+
+#popupSub {
+  font-size: 14px;
+  color: #ff8fbf;
+}
+
+/* final popup */
+#finalText {
+  font-size: 22px;
+  color: #9b6bff;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+#finalEmoji {
+  font-size: 28px;
+}
+
+/* sparkle */
+.sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #fff 0%, #d9b8ff 60%, transparent 70%);
+  border-radius: 50%;
+  animation: sparkle 2.5s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes sparkle {
+  0% { transform: scale(0.5) translateY(0); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: scale(1.2) translateY(-40px); opacity: 0; }
+}
+
+/* floating icons */
+#floating-icons span {
+  position: fixed;
+  bottom: -40px;
+  font-size: 24px;
+  animation: floatUp 8s linear infinite;
+}
+
+@keyframes floatUp {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-120vh); opacity: 0; }
+}
+/* ===== iPhone Mode ===== */
+@media only screen 
+  and (max-width: 430px) 
+  and (-webkit-device-pixel-ratio: 2) {
+
+  body {
+    font-size: 18px;
+  }
+
+  h1 {
+    font-size: 22px;
+    padding: 0 12px;
+  }
+
+  p {
+    font-size: 16px;
+  }
+
+  button {
+    width: 80%;
+    max-width: 300px;
+    font-size: 18px;
+    padding: 14px 0;
+  }
+
+  #wheel-container {
+    width: 260px;
+    height: 260px;
+    margin: 20px auto;
+  }
+
+  #wheel {
+    width: 260px;
+    height: 260px;
+  }
+
+  #pointer {
+    font-size: 30px;
+    top: -10px;
+  }
+
+  .popupBox {
+    width: 85%;
+    max-width: 300px;
+    padding: 24px 20px;
+  }
+
+  #popupReward {
+    font-size: 22px;
+  }
+
+  #popupTitle {
+    font-size: 18px;
+  }
+
+  #popupSub {
+    font-size: 13px;
+  }
+
+  #finalText {
+    font-size: 20px;
+  }
+
+  #finalEmoji {
+    font-size: 26px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<section id="intro" class="active">
+  <h1>💖 Happy Valentine’s Day 💖</h1>
+  <p>สำหรับแมวตัวโปรด 💜🐱</p>
+  <button onclick="start()">พร้อมเติมความหวาน 💌</button>
+</section>
+
+<section id="wheelPage">
+  <h1>💘 วงล้อวาเลนไทน์ของ meowbabe 💜🐱🐶</h1>
+
+  <div id="wheel-container">
+    <div id="pointer">💜</div>
+    <canvas id="wheel" width="300" height="300"></canvas>
+  </div>
+
+  <button onclick="spin()">หมุนวงล้อ 🎡</button>
+</section>
+
+<!-- popup รางวัล -->
+<div id="popup" class="popup" onclick="closeReward()">
+  <div class="popupBox">
+    <div id="popupTitle">💝 รางวัลของแงวก็คือ 🫶🏻</div>
+    <div id="popupReward"></div>
+    <div id="popupSub">สิทธิ์พิเศษสำหรับเธอคนเดียว 💜✨</div>
+  </div>
+</div>
+
+<!-- popup สุดท้าย -->
+<div id="finalPopup" class="popup" onclick="this.style.display='none'">
+  <div class="popupBox">
+    <span class="sparkle" style="top:10%; left:15%"></span>
+    <span class="sparkle" style="top:20%; left:80%"></span>
+    <span class="sparkle" style="top:60%; left:10%"></span>
+    <span class="sparkle" style="top:70%; left:75%"></span>
+    <span class="sparkle" style="top:40%; left:50%"></span>
+
+    <div id="finalText">ทุกรางวัลเป็นของเธอคนพิเศษ</div>
+    <div id="finalEmoji">🐶🐱💜✨💐🫶🏻</div>
+  </div>
+</div>
+
+<div id="floating-icons"></div>
+
+<script>
+const prizes = [
+  "กอดเติมพลัง🤍",
+  "โดนมุมุ10ที😚",
+  "มื้อตามใจแงว🍽️",
+  "โดนจุ๊บ1นาที💋",
+  "พาไปทำสวย💅🏼",
+  "ตามใจทั้งวัน😬🤏🏻"
+];
+
+const canvas = document.getElementById("wheel");
+const ctx = canvas.getContext("2d");
+const size = canvas.width;
+const center = size / 2;
+const slice = 2 * Math.PI / prizes.length;
+let rotation = 0;
+let lastPrize = "";
+
+function drawWheel() {
+  prizes.forEach((text, i) => {
+    ctx.beginPath();
+    ctx.moveTo(center, center);
+    ctx.fillStyle = i % 2 ? "#ffd6e8" : "#ffb3d1";
+    ctx.arc(center, center, center, slice*i, slice*(i+1));
+    ctx.fill();
+
+    ctx.save();
+    ctx.translate(center, center);
+    ctx.rotate(slice*i + slice/2);
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#ff4f9a";
+    ctx.font = "15px Mali";
+    ctx.fillText(text, center*0.55, 0);
+    ctx.restore();
+  });
+}
+drawWheel();
+
+function start() {
+  intro.classList.remove("active");
+  wheelPage.classList.add("active");
+}
+
+function spin() {
+  const rand = Math.floor(Math.random() * prizes.length);
+  lastPrize = prizes[rand];
+  rotation += 360 * 5 + (360 - rand * (360/prizes.length));
+  canvas.style.transform = `rotate(${rotation}deg)`;
+
+  setTimeout(() => {
+    popupReward.innerText = lastPrize;
+    popup.style.display = "flex";
+  }, 4000);
+}
+
+function closeReward() {
+  popup.style.display = "none";
+  setTimeout(() => {
+    finalPopup.style.display = "flex";
+  }, 300);
+}
+
+/* floating icons */
+const icons = ["💜","🐱","🐶","🌹","🌻"];
+setInterval(() => {
+  const span = document.createElement("span");
+  span.innerText = icons[Math.floor(Math.random()*icons.length)];
+  span.style.left = Math.random()*100 + "vw";
+  document.getElementById("floating-icons").appendChild(span);
+  setTimeout(() => span.remove(), 8000);
+}, 500);
+</script>
+
+</body>
+</html>
