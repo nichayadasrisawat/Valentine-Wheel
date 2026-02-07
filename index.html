@@ -48,15 +48,6 @@ button {
   box-shadow: 0 6px 15px rgba(255,111,174,.4);
 }
 
-/* ปุ่มเสียง */
-#soundBtn {
-  margin-top: 14px;
-  background: #fff;
-  color: #ff6fae;
-  border: 2px solid #ffb3d1;
-  box-shadow: none;
-}
-
 /* วงล้อ */
 #wheel-container {
   position: relative;
@@ -146,7 +137,6 @@ button {
   <h1>💖 Happy Valentine’s Day 💖</h1>
   <p>สำหรับแมวตัวโปรด 💜🐱</p>
   <button onclick="start()">พร้อมเติมความหวาน 💌</button>
-  <button id="soundBtn" onclick="toggleSound()">🔊 เปิดเสียง</button>
 </section>
 
 <section id="wheelPage">
@@ -183,18 +173,7 @@ button {
 <!-- floating icons -->
 <div id="floating-icons"></div>
 
-<!-- เสียง -->
-<audio id="bgm" loop>
-  <source src="https://cdn.pixabay.com/audio/2023/03/28/audio_6cfdc6c5b6.mp3">
-</audio>
-
-<audio id="ding">
-  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3">
-</audio>
-
 <script>
-let soundOn = false;
-
 const prizes = [
   "กอดเติมพลัง 🤍",
   "โดนมุมุ 10 ที 😚",
@@ -230,33 +209,17 @@ function drawWheel() {
 }
 drawWheel();
 
-function toggleSound() {
-  const bgm = document.getElementById("bgm");
-  const btn = document.getElementById("soundBtn");
-  soundOn = !soundOn;
-
-  if (soundOn) {
-    bgm.volume = 0.6;
-    bgm.play().catch(()=>{});
-    btn.innerText = "🔇 ปิดเสียง";
-  } else {
-    bgm.pause();
-    bgm.currentTime = 0;
-    btn.innerText = "🔊 เปิดเสียง";
-  }
-}
-
 function start() {
+  document.getElementById("bgm").volume = 0.6;
+  document.getElementById("bgm").play();
   intro.classList.remove("active");
   wheelPage.classList.add("active");
 }
 
 function spin() {
-  if (soundOn) {
-    const ding = document.getElementById("ding");
-    ding.currentTime = 0;
-    ding.play().catch(()=>{});
-  }
+  const ding = document.getElementById("ding");
+  ding.currentTime = 0;
+  ding.play();
 
   const rand = Math.floor(Math.random() * prizes.length);
   rotation += 360 * 5 + (360 - rand * (360/prizes.length));
